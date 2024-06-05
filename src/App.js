@@ -1,66 +1,56 @@
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import Note from "./components/Note/Note";
+import CreateArea from "./components/CreateArea/CreateArea";
+
 
 function App() {
-  const getAddNote = () => {
-    return (
-      <div>
-        <h2>Add new note</h2>
-        <div>
-          <input
-            type="text"
-            name="title"
-            className="form-input mb-30"
-            placeholder="Title"
-            value=""
-          />
+  const [notes, setNotes] = useState([]);
 
-          <textarea
-            rows="10"
-            name="content"
-            className="form-input"
-            placeholder="Text"
-          />
+  function addNote(newNote) {
+    setNotes((prevNotes) => {
+      return [...prevNotes, newNote];
+    });
+  }
 
-          <a href="#" className="button green">
-            SAVE
-          </a>
-        </div>
-      </div>
-    );
-  };
-
-  const getPreview = () => {
-    return (
-      <div>
-        <div className="note-operations">
-          <a href="#">
-            <i className="fa fa-pencil-alt" />
-          </a>
-          <a href="#">
-            <i className="fa fa-trash" />
-          </a>
-        </div>
-        <div>
-         <h2>Title of experimental note</h2>
-         <p>Text Note Test</p>
-        </div>
-      </div>
-    );
-  };
+  function deleteNote(id) {
+    setNotes((prevNotes) => {
+      return prevNotes.filter((noteItem, index) => {
+        return index !== id;
+      });
+    });
+  }
 
   return (
-    <div className="App">
+    <div className="App preview-section">
+     
+
+      {/* <Header /> */}
+     
       <div className="notes-section">
         <ul className="notes-list">
-           <li className="note-item">Note #1</li>
-           <li className="note-item">Note #2</li>
-           <li className="note-item">Note #3</li>
-           <li className="note-item">Note #4</li>
+          {notes.map((noteItem, index) => {
+            return (
+              <li >
+                <Note className="notes-section note-item"
+                  key={index}
+                  id={index}
+                  title={noteItem.title}
+                  content={noteItem.content}
+                  onDelete={deleteNote}
+                />
+              </li>
+            );
+          })}
         </ul>
         <button className="add-btn">+</button>
       </div>
-      <div className="preview-section">{getPreview()}</div>
+      <CreateArea onAdd={addNote} />
+      {/* <Footer /> */}
     </div>
+    
   );
 }
 
